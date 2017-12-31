@@ -2,11 +2,11 @@ import re,requests,queue
 
 LINK = set()
 List = []
-times = 10
+times = 10009970
 
-URL = "http://www.ygdy8.com"
+URL = "http://www.dytt8.net/"
 headers = {
-    'Referer':'http://www.ygdy8.com/',
+    'Referer':'http://www.dytt8.net/',
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36'
 }
 
@@ -35,11 +35,14 @@ def bfs(url):
     global num
     try:
         while not Q.empty():
-            url = Q.get()
-            r = requests.get(URL+url,headers=headers)
-            r.encoding=r.apparent_encoding
-            text = r.text
-            links = re.findall(r'/html[^"\';]+',text)
+            try:
+                url = Q.get()
+                r = requests.get(URL+url,headers=headers)
+                r.encoding=r.apparent_encoding
+                text = r.text
+                links = re.findall(r'[^\'"<>]+\.html',text)
+            except:
+                continue
 
             for link in links:
                 if link in LINK:
@@ -54,7 +57,7 @@ def bfs(url):
         pass
 
 def main():
-    url = '/'
+    url = '/plus/sitemap.html'
     bfs(url)
     file = open('movies.txt','w+',encoding='utf-8')
     url_file = open('urls.txt','w+',encoding='utf-8')
